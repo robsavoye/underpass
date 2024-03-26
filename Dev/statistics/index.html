@@ -1,0 +1,1463 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A customizable data engine that processes mapping data">
+      
+      
+      
+        <link rel="canonical" href="https://underpass.hotosm.org/Dev/statistics/">
+      
+      
+        <link rel="prev" href="../osmstats/">
+      
+      
+        <link rel="next" href="../validation/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.6">
+    
+    
+      
+        <title>Statistics - Underpass</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.35e1ed30.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../css/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#statistics-calculations" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Underpass" class="md-header__button md-logo" aria-label="Underpass" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Underpass
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Statistics
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hotosm/underpass/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hotosm/underpass
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Underpass" class="md-nav__button md-logo" aria-label="Underpass" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Underpass
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hotosm/underpass/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hotosm/underpass
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Get Started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Get Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../get-started/Install/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Install
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../get-started/Setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../get-started/NextSteps/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Next steps
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Replication
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Replication
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Replication/Run/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Run
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Replication/Advanced/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Advanced
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    API
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            API
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API/PythonDB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python (DB)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API/Python/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API/REST/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    REST
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    UI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            UI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../UI/Install/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Install
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../UI/UnderpassMap/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    UnderpassMap
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../UI/UnderpassFeatureList/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    UnderpassFeatureList
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Developers
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Developers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../coding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Coding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../debugging/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Debugging
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changefile/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ChangeFile
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dataflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data flow
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../osmstats/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSM Stats
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Statistics
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Statistics
+  </span>
+  
+
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Page contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Page contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#priority-boundary" class="md-nav__link">
+    Priority boundary
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-collected" class="md-nav__link">
+    What Is Collected
+  </a>
+  
+    <nav class="md-nav" aria-label="What Is Collected">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#building-types" class="md-nav__link">
+    Building Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amenity-types" class="md-nav__link">
+    Amenity Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#places-types" class="md-nav__link">
+    Places Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#highway-types" class="md-nav__link">
+    Highway Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#school-types" class="md-nav__link">
+    School Types
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calculation-data-flow" class="md-nav__link">
+    Calculation Data flow
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#changesets-table" class="md-nav__link">
+    changesets table
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../validation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../replication/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Replication
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utility/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Utility
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chroots/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chroots
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Page contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Page contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#priority-boundary" class="md-nav__link">
+    Priority boundary
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-collected" class="md-nav__link">
+    What Is Collected
+  </a>
+  
+    <nav class="md-nav" aria-label="What Is Collected">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#building-types" class="md-nav__link">
+    Building Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amenity-types" class="md-nav__link">
+    Amenity Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#places-types" class="md-nav__link">
+    Places Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#highway-types" class="md-nav__link">
+    Highway Types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#school-types" class="md-nav__link">
+    School Types
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calculation-data-flow" class="md-nav__link">
+    Calculation Data flow
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#changesets-table" class="md-nav__link">
+    changesets table
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="statistics-calculations">Statistics Calculations<a class="headerlink" href="#statistics-calculations" title="Permanent link">&para;</a></h1>
+<p>Underpass process two input streams for data, but only one is used for
+the initial statistics calculations. <a href="../changefile/">ChangeSet</a> are
+used to populate some of the columns in the database, but aren't used
+during statistics calculations by the backend. Only the
+<a href="../changefile/">OsmChange</a> file is used, as it contains the the data
+that is changed.</p>
+<p>The OsmChange data file contains 3 categories of data, what was
+created, modified, or deleted. Currently only changed and modified
+data are used for statistics calculations.</p>
+<p>All of the changed data is parsed into a <a href="https://hotosm.github.io/underpass/classosmchange_1_1OsmChange.html">data
+structure</a>
+that can be passed between classes. This data structure contains all
+the data as well as the associated action, create or modify. The
+parsed data is then passed to the
+<a href="https://hotosm.github.io/underpass/classosmchange_1_1OsmChangeFile.html#a4a6035b16ec815be6e0289b65bcbaaad">OsmChangeFile::collectStat()</a>
+method to do the calculations. While currently part of the core code,
+in the future this will be a plugin, allowing others to create
+different statistics calculations without modifying the code.</p>
+<h2 id="priority-boundary">Priority boundary<a class="headerlink" href="#priority-boundary" title="Permanent link">&para;</a></h2>
+<p>Currently, changes to be proccessed are filtered by <a href="https://hotosm.github.io/underpass/classchangeset_1_1ChangeSetFile.html">ChangeSetFile::areaFilter()</a>
+and <a href="https://hotosm.github.io/underpass/classosmchange_1_1OsmChangeFile.html">OsmChangeFile::areaFilter()</a>, using a boundary polygon.
+In some cases is not possible to say if a OsmChange is inside
+the priority boundary. To disable the filtering in the replication
+process, you can add the argument <code>--osmnoboundary</code> for OsmChanges
+or <code>--oscnoboundary</code> for Changesets.</p>
+<h2 id="what-is-collected">What Is Collected<a class="headerlink" href="#what-is-collected" title="Permanent link">&para;</a></h2>
+<p>The original statistics counted buildings, waterways, and POIs. The
+new statistics break this down into two categories, accumulates
+statistics for things like <em>buildings</em>, as well as the more detailed
+representation, like what type of building it is. The list of values
+is configurable, as it uses a <a href="https://github.com/hotosm/underpass/blob/master/config/stats/statistics.yaml">YAML</a> file.</p>
+<p>OpenStreetMap features support a <em>keyword</em> and <em>value</em> pair. The
+keywords are <a href="https://taginfo.openstreetmap.org/">loosely defined</a>,
+and over time some have changed and been improved. Often new mappers
+get confused, so may use keywords and values in an inconsistent
+manner. Also over time the definitions of some tags has changed, or
+been extended.</p>
+<p>For example, let's look at schools. There is a variety of ways school
+buildings are tagged. Sometimes it's <em>building=school</em>, with school as
+the value. Sometimes school is the keyword, and the value is the type
+of school. In this case, the type of school is accumulated, as well as
+a generic <em>school</em> count. Also if <em>building=school</em> isn't used, then
+every school also increments the count of buildings.</p>
+<p>Each category of data has the total accumulated value, as well as the
+more detailed breakdown. For example, it's possible to extract
+statistics for only hospitals, which is a subset of all the
+buildings. As keywords and values can be in different feature
+categories, some are checked for in multiple ways. Some keywords and
+values may be spelled differently than the default, so variations are
+also looked for to be complete.</p>
+<p>To find all the common tags, several continents worth of data was
+analyzed to find the most common patterns for the features we want to
+collect statistics for. Mixed with inconsistent tagging schemes is
+random capitalization, misspellings, and international spellings. The
+attempt is made to catch all reasonable variations.
+<a href="https://taginfo.openstreetmap.org/">TagInfo</a> was used to find totals
+of some variations, with weird tagging that was not very common gets
+ignored to avoid performance impacts, and data bloat.</p>
+<h3 id="building-types">Building Types<a class="headerlink" href="#building-types" title="Permanent link">&para;</a></h3>
+<p>Most buildings added by remote tracing of satellite imagery lack any
+metadata tags beyond <em>building=yes</em>. When local mappers import more
+detailed data, or update the existing metadata, those values get
+added. This is a common set of building values.</p>
+<ul>
+<li>yes</li>
+<li>house</li>
+<li>residential</li>
+<li>commercial</li>
+<li>retail</li>
+<li>commercial;residential</li>
+<li>apartments</li>
+<li>kitchen</li>
+<li>roof</li>
+<li>construction</li>
+<li>school</li>
+<li>clinic</li>
+<li>hospital</li>
+<li>office</li>
+<li>public</li>
+<li>church</li>
+<li>mosque</li>
+<li>temple</li>
+<li>service</li>
+<li>warehouse</li>
+<li>industrial</li>
+<li>kiosk</li>
+<li>abandoned</li>
+<li>cabin</li>
+<li>bungalow</li>
+<li>hotel</li>
+<li>farm</li>
+<li>hut</li>
+<li>train_station</li>
+<li>house_boat</li>
+<li>barn</li>
+<li>historic</li>
+<li>latrine</li>
+<li>latrines</li>
+<li>toilet</li>
+<li>toilets</li>
+</ul>
+<h3 id="amenity-types">Amenity Types<a class="headerlink" href="#amenity-types" title="Permanent link">&para;</a></h3>
+<p>Most amenities are added by local mappers or through a data
+import. Not all amenities are buildings, but for our use case that's
+all that is analyzed. These are the common values for the <em>amenity</em>
+keyword.</p>
+<ul>
+<li>hospital</li>
+<li>school</li>
+<li>clinic</li>
+<li>kindergarten</li>
+<li>drinking_water</li>
+<li>health_facility</li>
+<li>health_center</li>
+<li>healthcare</li>
+</ul>
+<h3 id="places-types">Places Types<a class="headerlink" href="#places-types" title="Permanent link">&para;</a></h3>
+<p>Places contain multiple features, and are mostly used to determine
+local metadata improvements. </p>
+<ul>
+<li>village</li>
+<li>hamlet</li>
+<li>neighborhood</li>
+<li>city</li>
+<li>town</li>
+</ul>
+<h3 id="highway-types">Highway Types<a class="headerlink" href="#highway-types" title="Permanent link">&para;</a></h3>
+<p>Highways traced from satellite imagery often lack metadata beyond the
+functional type. For example, a highway that connects two villages is
+easy to determine. An accumulated value for the total of highways, and
+the total length in kilometers is store as an aggregate. More detailed
+statistics are also kept allowing more detail when needed.</p>
+<ul>
+<li>trunk</li>
+<li>tertiary</li>
+<li>secondary</li>
+<li>unclassified</li>
+<li>track</li>
+<li>residential</li>
+<li>path</li>
+<li>service</li>
+<li>bridge</li>
+</ul>
+<h3 id="school-types">School Types<a class="headerlink" href="#school-types" title="Permanent link">&para;</a></h3>
+<p>When <em>school</em> is a keyword, there are several values for the type of
+school. An aggregate total of schools can be calculated, as well as detail
+for the type of school.</p>
+<ul>
+<li>primary</li>
+<li>secondary</li>
+<li>kindergarten</li>
+</ul>
+<h2 id="calculation-data-flow">Calculation Data flow<a class="headerlink" href="#calculation-data-flow" title="Permanent link">&para;</a></h2>
+<p>The data is processed by
+<a href="https://github.com/hotosm/underpass">Underpass</a>. Underpass downloads
+the changeset and the OsmChange files from the OpenStreetMap planet
+server every minute. Downloaded files are also cached on disk, so it's
+also possible to process data without a network connection. Once the
+data is parsed from the respective data formats, it gets passed to the
+<a href="https://hotosm.github.io/underpass/classosmchange_1_1OsmChangeFile.html#a4a6035b16ec815be6e0289b65bcbaaad">OsmChangeFile::collectStat()</a>
+method. That method loops through the data structure containing the
+changes to the map data. Within that method, it calls
+<a href="https://hotosm.github.io/underpass/classosmchange_1_1OsmChangeFile.html">ChangeSetFile::scanTags()</a>,
+    which does all the real work. The <em>scanTags()</em> method uses <a href="https://hotosm.github.io/underpass/classstatsconfig_1_1StatsConfigSearch.html">StatsConfigSearch::search()</a> to
+    search the lists of keywords and values configured at the stats configuration file.
+ScanTags() returns an array of statistics for the desired features.
+That array is then converted by collectStats() into the <a href="https://hotosm.github.io/underpass/classosmchange_1_1ChangeStats.html">statistics data
+structure</a>,
+and control returns to the processing thread.</p>
+<p>The processing thread then passes the statistics data to
+<a href="https://hotosm.github.io/underpass/classosmstats_1_1QueryOSMStats.html#aa0aeffb3bb77e4891553ca1883f11a10">osmstats::applyChange()</a>,
+to insert them into the database.</p>
+<h2 id="changesets-table">changesets table<a class="headerlink" href="#changesets-table" title="Permanent link">&para;</a></h2>
+<p>This is the primary table used to contain the data for each
+changeset. All of the data is stored in a table for better query
+performance on large data sets. It also limits needing SQL <a href="https://www.postgresql.org/docs/13/functions-subquery.html">sub
+queries</a> or a
+<a href="https://www.postgresql.org/docs/13/tutorial-join.html">JOIN</a> between
+tables, reducing complexity.</p>
+<p>An <a href="https://www.postgresql.org/docs/13/hstore.html">hstore</a> is used to
+store the statistics instead of having a separate table for each
+feature to allow for more flexibility. An hstore is a key &amp; value
+pair, and multiple data items can be stored in a single column,
+indexed by the key. This allows for more features to be added by the
+backend and the frontend, without having modify the database schema.</p>
+<p>An example query to count the total number of buildings added by the
+user <strong>4321</strong> for a Tasking Manager project <strong>1234</strong> would be this:</p>
+<blockquote>
+<p>SELECT SUM(CAST(added::hstore-&gt;'building' AS DOUBLE precision)) FROM
+changesets WHERE 'hotosm-project-1234' = ANY(hashtags) AND uid=4321;</p>
+</blockquote>
+<p>The source is the satellite imagery used for remote mapping.</p>
+<p>&nbsp;</p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>The ID of this changeset</td>
+</tr>
+<tr>
+<td>editor</td>
+<td>The editor used for this changeset</td>
+</tr>
+<tr>
+<td>uid</td>
+<td>The OSM User ID of the mapper</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>The timestamp when this changes was uploaded</td>
+</tr>
+<tr>
+<td>closed_at</td>
+<td>The timestamp when this uploaded change completed processing</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>The timestamp when this last had data updated</td>
+</tr>
+<tr>
+<td>added</td>
+<td>An hstore array of the added map features</td>
+</tr>
+<tr>
+<td>modified</td>
+<td>An hstore array of the modified map features</td>
+</tr>
+<tr>
+<td>deleted</td>
+<td>An hstore array of the deleted map features</td>
+</tr>
+<tr>
+<td>hashtags</td>
+<td>An array of the hashtags used for this changeset</td>
+</tr>
+<tr>
+<td>source</td>
+<td>The imagery source used for this changeset</td>
+</tr>
+<tr>
+<td>bbox</td>
+<td>The bounding box of this changeset</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/hotosm/" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/hotosm" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.hotosm.org" target="_blank" rel="noopener" title="www.hotosm.org" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.3c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64h185.4c2.2 20.4 3.3 41.8 3.3 64zm28.8-64h123.1c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6 78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7 10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5 11.6 26 20.9 58.2 27 94.7zm-209 0H18.6c30-74.1 93.6-130.9 172-151.6-25.5 34.2-45.3 87.7-55.3 151.6zM8.1 192h123.1c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zm186.6 254.6c-11.6-26-20.9-58.2-27-94.6h176.6c-6.1 36.4-15.5 68.6-27 94.6-10.5 23.6-22.2 40.7-33.5 51.5-11.2 10.7-20.5 13.9-27.8 13.9s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6-78.4-20.7-142-77.5-172-151.6h116.7zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6 25.5-34.2 45.2-87.7 55.3-151.6h116.6z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.aecac24b.min.js"></script>
+      
+    
+  </body>
+</html>
